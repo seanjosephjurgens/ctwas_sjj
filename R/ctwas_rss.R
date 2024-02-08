@@ -182,7 +182,7 @@ ctwas_rss <- function(
     saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
   }else{
     loginfo("LD matrix info for this analysis already found! Loading...")
-    regionlist <- get(load(paste0(outputdir, "/", outname, ".regionlist.RDS")))
+    regionlist <- readRDS(paste0(outputdir, "/", outname, ".regionlist.RDS"))
   }
   
   temp_regs <- lapply(1:22, function(x) cbind(x,
