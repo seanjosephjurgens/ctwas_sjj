@@ -204,6 +204,7 @@ susieI_rss <- function(zdf,
                          cbind(R_snp_gene, R_snp))
             }
 
+            message("debug5")
             # in susie, prior_variance is under standardized scale (if performed)
             susieres <- susie_rss(z, R,
                                   z_ld_weight = z_ld_weight,
@@ -215,7 +216,7 @@ susieI_rss <- function(zdf,
 
             geneinfo <- read_exprvar(ld_exprvarfs[b])
 
-            message("debug5")
+            message("debug6")
             if (!is.null(ld_pgenfs)){
               snpinfo <-  read_pvar(ld_pvarfs[b])
             } else {
