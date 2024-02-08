@@ -168,18 +168,21 @@ ctwas_rss <- function(
     stop("thin value needs to be in (0,1]")
   }
 
-  regionlist <- index_regions(regionfile = regionfile,
-                              exprvarfs = ld_exprvarfs,
-                              pvarfs = ld_pvarfs,
-                              ld_Rfs = ld_Rfs,
-                              select = zdf$id,
-                              thin = thin, minvar = 2,
-                              outname = outname,
-                              outputdir = outputdir,
-                              merge = merge) # susie_rss can't take 1 var.
-
-  saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
-
+  if(!file.exists(paste0(outputdir, "/", outname, ".regionlist.RDS"))){
+    regionlist <- index_regions(regionfile = regionfile,
+                                exprvarfs = ld_exprvarfs,
+                                pvarfs = ld_pvarfs,
+                                ld_Rfs = ld_Rfs,
+                                select = zdf$id,
+                                thin = thin, minvar = 2,
+                                outname = outname,
+                                outputdir = outputdir,
+                                merge = merge) # susie_rss can't take 1 var.
+    saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
+  }else{
+    regionlist <- get(load(paste0(outputdir, "/", outname, ".regionlist.RDS")))
+  }
+  
   temp_regs <- lapply(1:22, function(x) cbind(x,
                    unlist(lapply(regionlist[[x]], "[[", "start")),
                      unlist(lapply(regionlist[[x]], "[[", "stop"))))
