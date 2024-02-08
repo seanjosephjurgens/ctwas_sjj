@@ -235,12 +235,12 @@ susieI_rss <- function(zdf,
           }
 
           outdf.core <- do.call(rbind, outdf.core.list)
-          outdf.core
-          
           message("completed a chunk...")
           message(paste0('excerpt chunk: ', colnames(outdf.core)[1], ' ', colnames(outdf.core)[2]))
           message(paste0('excerpt chunk: ', outdf.core[1,1], ' ', outdf.core[1,2]))
           # outdf <- rbind(outdf, outdf.core)
+          outdf.core
+          
     }
     message("completed all chunks for this iteration!")
     message(paste0('excerpt: ', colnames(outdf)[1], ' ', colnames(outdf)[2]))
