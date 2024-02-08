@@ -103,9 +103,10 @@ susieI_rss <- function(zdf,
   V.gene <- group_prior_var[1]
   V.SNP <- group_prior_var[2]
 
+  message("debug0.0")
   cl <- parallel::makeForkCluster(ncore, outfile = "")
   doParallel::registerDoParallel(cl)
-
+  
   for (iter in 1:niter){
 
     loginfo("run iteration %s", iter)
@@ -120,6 +121,7 @@ susieI_rss <- function(zdf,
 
     outdf <- foreach (core = 1:length(corelist), .combine = "rbind",
                       .packages = "ctwas") %dopar% {
+      message("debug0.1")
       # outdf <- NULL
       # for (core in 2:10) {
 
@@ -139,6 +141,7 @@ susieI_rss <- function(zdf,
 
             p <- length(gidx) + length(sidx)
 
+            message("debug1")
             if (is.null(prior.gene) | is.null(prior.SNP)){
               prior <- c(rep(1/p, length(gidx)),
                          rep(1/p, length(sidx)))
@@ -147,6 +150,7 @@ susieI_rss <- function(zdf,
                          rep(prior.SNP, length(sidx)))
             }
 
+            message("debug2")
             if (is.null(V.gene) | is.null(V.SNP)){
               V <- matrix(rep(50, L * p), nrow = L)
               # following the default in susieR::susie_rss
@@ -155,6 +159,7 @@ susieI_rss <- function(zdf,
               V <- matrix(rep(V, each = L), nrow=L)
             }
 
+            message("debug3")
             if (isTRUE(use_null_weight)){
               nw <- max(0, 1 - sum(prior))
               prior <- prior/(1-nw)
@@ -166,7 +171,7 @@ susieI_rss <- function(zdf,
             z.s <- zdf[match(sid, zdf$id), ][["z"]]
             z <- c(z.g, z.s)
 
-
+            message("debug4")
             if (!(is.null(ld_pgenfs))){
               # prepare LD genotype data
               ld_pgen <- prep_pgen(pgenf = ld_pgenfs[b], ld_pvarfs[b])
@@ -210,6 +215,7 @@ susieI_rss <- function(zdf,
 
             geneinfo <- read_exprvar(ld_exprvarfs[b])
 
+            message("debug5")
             if (!is.null(ld_pgenfs)){
               snpinfo <-  read_pvar(ld_pvarfs[b])
             } else {
