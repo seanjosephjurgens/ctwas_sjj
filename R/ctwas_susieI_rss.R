@@ -236,9 +236,12 @@ susieI_rss <- function(zdf,
 
           outdf.core <- do.call(rbind, outdf.core.list)
           outdf.core
+
+          message("completed a chunk...")
           # outdf <- rbind(outdf, outdf.core)
     }
-
+    message("completed all chunks for this iteration!")
+    
     if (isTRUE(estimate_group_prior)){
       prior.SNP <- mean(outdf[outdf[ , "type"] == "SNP", "susie_pip"])
       prior.gene <- mean(outdf[outdf[ , "type"] == "gene", "susie_pip"])
