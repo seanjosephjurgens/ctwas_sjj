@@ -205,6 +205,7 @@ susieI_rss <- function(zdf,
             }
 
             message("debug5")
+            
             # in susie, prior_variance is under standardized scale (if performed)
             susieres <- susie_rss(z, R,
                                   z_ld_weight = z_ld_weight,
