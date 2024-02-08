@@ -169,6 +169,7 @@ ctwas_rss <- function(
   }
 
   if(!file.exists(paste0(outputdir, "/", outname, ".regionlist.RDS"))){
+    loginfo("LD matrix info for this analysis not found. Creating...")
     regionlist <- index_regions(regionfile = regionfile,
                                 exprvarfs = ld_exprvarfs,
                                 pvarfs = ld_pvarfs,
@@ -180,6 +181,7 @@ ctwas_rss <- function(
                                 merge = merge) # susie_rss can't take 1 var.
     saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
   }else{
+    loginfo("LD matrix info for this analysis already found! Loading...")
     regionlist <- get(load(paste0(outputdir, "/", outname, ".regionlist.RDS")))
   }
   
