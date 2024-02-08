@@ -242,6 +242,7 @@ susieI_rss <- function(zdf,
           outdf.core
           
     }
+    parallel::stopCluster(cl)
     message("completed all chunks for this iteration!")
     message(paste0('excerpt: ', colnames(outdf)[1], ' ', colnames(outdf)[2]))
     message(paste0('excerpt: ', outdf[1,1], ' ', outdf[1,2]))
@@ -278,7 +279,7 @@ susieI_rss <- function(zdf,
     data.table::fwrite(outdf, file= paste0(outname, ".susieIrss.txt"),
                        sep="\t", quote = F)
 
-    parallel::stopCluster(cl)
+    #parallel::stopCluster(cl)
   }
 
   #parallel::stopCluster(cl)
