@@ -104,7 +104,7 @@ susieI_rss <- function(zdf,
   V.SNP <- group_prior_var[2]
 
   message("debug0.0")
-  cl <- parallel::makePSOCKcluster(ncore, outfile = "")
+  cl <- parallel::makeFORKCluster(ncore, outfile = "")
   doParallel::registerDoParallel(cl)
   
   for (iter in 1:niter){
@@ -214,7 +214,6 @@ susieI_rss <- function(zdf,
             message(paste0("prior: ", prior[1]))
             message(paste0("nw: ", nw[1]))
             message(paste0("V: ", V[1]))
-            message(paste0("estimate_prior_variance: ", estimate_prior_variance[1]))
             message(paste0("coverage: ", coverage[1]))
             susieres <- susie_rss(z, R,
                                   z_ld_weight = z_ld_weight,
