@@ -104,7 +104,7 @@ susieI_rss <- function(zdf,
   V.SNP <- group_prior_var[2]
 
   #message("debug0.0")
-  cl <- parallel::makeForkCluster(ncore, outfile = "")
+  cl <- parallel::makeCluster(ncore, outfile = "")
   doParallel::registerDoParallel(cl)
   
   for (iter in 1:niter){
