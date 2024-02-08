@@ -104,8 +104,8 @@ susieI_rss <- function(zdf,
   V.SNP <- group_prior_var[2]
 
   #message("debug0.0")
-  cl <- parallel::makeCluster(ncore, outfile = "")
-  doParallel::registerDoParallel(cl)
+  #cl <- parallel::makeCluster(ncore, outfile = "")
+  #doParallel::registerDoParallel(cl)
   
   for (iter in 1:niter){
 
@@ -114,8 +114,8 @@ susieI_rss <- function(zdf,
     snp.rpiplist <- list()
     gene.rpiplist <- list()
 
-    #cl <- parallel::makeCluster(ncore, outfile = "")
-    #doParallel::registerDoParallel(cl)
+    cl <- parallel::makeForkCluster(ncore, outfile = "")
+    doParallel::registerDoParallel(cl)
 
     corelist <- region2core(regionlist, ncore)
 
@@ -236,15 +236,15 @@ susieI_rss <- function(zdf,
 
           outdf.core <- do.call(rbind, outdf.core.list)
           message("completed a chunk...")
-          message(paste0('excerpt chunk: ', colnames(outdf.core)[1], ' ', colnames(outdf.core)[2]))
-          message(paste0('excerpt chunk: ', outdf.core[1,1], ' ', outdf.core[1,2]))
+          #message(paste0('excerpt chunk: ', colnames(outdf.core)[1], ' ', colnames(outdf.core)[2]))
+          #message(paste0('excerpt chunk: ', outdf.core[1,1], ' ', outdf.core[1,2]))
           # outdf <- rbind(outdf, outdf.core)
           outdf.core
           
     }
     message("completed all chunks for this iteration!")
     message(paste0('excerpt: ', colnames(outdf)[1], ' ', colnames(outdf)[2]))
-    message(paste0('excerpt: ', outdf[1,1], ' ', oudf[1,2]))
+    message(paste0('excerpt: ', outdf[1,1], ' ', outdf[1,2]))
     
     if (isTRUE(estimate_group_prior)){
       prior.SNP <- mean(outdf[outdf[ , "type"] == "SNP", "susie_pip"])
@@ -278,10 +278,10 @@ susieI_rss <- function(zdf,
     data.table::fwrite(outdf, file= paste0(outname, ".susieIrss.txt"),
                        sep="\t", quote = F)
 
-    #parallel::stopCluster(cl)
+    parallel::stopCluster(cl)
   }
 
-  parallel::stopCluster(cl)
+  #parallel::stopCluster(cl)
 
   list("group_prior"= c(prior.gene, prior.SNP),
        "group_prior_var" = c(V.gene, V.SNP))
