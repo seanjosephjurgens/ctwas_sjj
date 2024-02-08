@@ -241,6 +241,8 @@ susieI_rss <- function(zdf,
           # outdf <- rbind(outdf, outdf.core)
     }
     message("completed all chunks for this iteration!")
+    message(paste0('excerpt: ', colnames(outdf)[1], ' ', colnames(outdf)[2]))
+    message(paste0('excerpt: ', outdf[1,1], ' ', oudf[1,2]))
     
     if (isTRUE(estimate_group_prior)){
       prior.SNP <- mean(outdf[outdf[ , "type"] == "SNP", "susie_pip"])
