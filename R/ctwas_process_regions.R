@@ -46,6 +46,7 @@ index_regions <- function(regionfile,
                           maxSNP = Inf,
                           minvar = 1,
                           merge = T,
+                          ncore = 1,
                           outname = NULL,
                           outputdir = getwd()) {
 
@@ -237,7 +238,13 @@ index_regions <- function(regionfile,
     wgtlistall <- do.call(c, wgtall)
     names(wgtlistall) <- do.call(c, lapply(wgtall, names))
 
-    for (b in 1: length(ld_Rfs)){
+    cl <- parallel::makeForkCluster(ncore, outfile = "")
+    doParallel::registerDoParallel(cl)
+    parlist <- foreach (b = c(1:length(ld_Rfs)), .combine='comb', .multicombine=TRUE,
+                      .init=list(list(), list()),
+                      .packages = "ctwas") %dopar% {
+    
+    #for (b in 1: length(ld_Rfs)){
       loginfo("Adding R matrix info for chrom %s", b)
       ld_Rf <- ld_Rfs[b]
       ld_Rinfo <- data.table::fread(ld_Rf, header = T)
