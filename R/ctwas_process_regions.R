@@ -240,8 +240,8 @@ index_regions <- function(regionfile,
 
     cl <- parallel::makeForkCluster(ncore, outfile = "")
     doParallel::registerDoParallel(cl)
-    parlist <- foreach (b = c(1:length(ld_Rfs)), .combine='comb', .multicombine=TRUE,
-                      .init=list(list(), list()),
+    regionlist2 <- foreach (b = c(1:length(ld_Rfs)), .combine='comb', .multicombine=TRUE,
+                      .init=list(),
                       .packages = "ctwas") %dopar% {
     
     #for (b in 1: length(ld_Rfs)){
@@ -304,9 +304,12 @@ index_regions <- function(regionfile,
           regionlist[[b]][[rn]][["R_s_file"]] <- R_s_file
         }
       }
+      regionlist[[b]]
+    }
+    for(b in c(1:22)){
+      regionlist[[b]] <- regionlist2[[b]]  
     }
   }
-
   regionlist
 }
 
