@@ -238,7 +238,7 @@ index_regions <- function(regionfile,
     wgtlistall <- do.call(c, wgtall)
     names(wgtlistall) <- do.call(c, lapply(wgtall, names))
 
-    cl <- parallel::makeForkCluster(ncore, outfile = "")
+    cl <- parallel::makeForkCluster(min(c(ncore, length(ld_Rfs))), outfile = "")
     doParallel::registerDoParallel(cl)
     regionlist2 <- foreach (b = c(1:length(ld_Rfs)), .combine='comb', .multicombine=TRUE,
                       .init=list(),
@@ -306,6 +306,7 @@ index_regions <- function(regionfile,
       }
       regionlist[[b]]
     }
+    parallel::stopCluster(cl)
     for(b in c(1:length(ld_Rfs))){
       regionlist[[b]] <- regionlist2[[b]]  
     }
