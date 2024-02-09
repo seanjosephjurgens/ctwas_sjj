@@ -118,6 +118,7 @@ ctwas_rss <- function(
   coverage = 0.95,
   max_snp_region = Inf,
   ncore = 1,
+  ncore_index_regions = 1,
   ncore.rerun = 1,
   outputdir = getwd(),
   outname = NULL,
