@@ -177,6 +177,7 @@ ctwas_rss <- function(
                                 select = zdf$id,
                                 thin = thin, minvar = 2,
                                 outname = outname,
+                                ncore = ncore_index_regions,
                                 outputdir = outputdir,
                                 merge = merge) # susie_rss can't take 1 var.
     saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
@@ -293,6 +294,7 @@ ctwas_rss <- function(
                                 pvarfs = ld_pvarfs,
                                 ld_Rfs = ld_Rfs,
                                 select = zdf,
+                                ncore = ncore_index_regions,
                                 thin = 1, maxSNP = max_snp_region, minvar = 2,
                                 outname = outname, outputdir = outputdir,
                                 merge = merge) # susie_rss can't take 1 var.
