@@ -306,7 +306,7 @@ index_regions <- function(regionfile,
       }
       regionlist[[b]]
     }
-    for(b in c(1:22)){
+    for(b in c(1:length(ld_Rfs))){
       regionlist[[b]] <- regionlist2[[b]]  
     }
   }
