@@ -303,7 +303,7 @@ index_regions <- function(regionfile,
           regionlist[[b]][[rn]][["R_s_file"]] <- R_s_file
         }
       }
-      regionlist[[b]]
+      list(regionlist[[b]])
     }
     parallel::stopCluster(cl)
     for(b in c(1:length(ld_Rfs))){
