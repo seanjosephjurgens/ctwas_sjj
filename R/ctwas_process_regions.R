@@ -240,10 +240,7 @@ index_regions <- function(regionfile,
 
     cl <- parallel::makeForkCluster(min(c(ncore, length(ld_Rfs))), outfile = "")
     doParallel::registerDoParallel(cl)
-    comb_list <- function(x){
-      list(x)
-    }
-    regionlist2 <- foreach (b = c(1:length(ld_Rfs)), .combine='comb_list', .init=list(),
+    regionlist2 <- foreach (b = c(1:length(ld_Rfs)), .combine='c', .init=list(),
                       .packages = "ctwas") %dopar% {
     
     #for (b in 1: length(ld_Rfs)){
