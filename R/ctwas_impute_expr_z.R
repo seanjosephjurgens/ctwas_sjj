@@ -151,6 +151,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
           for (i in 1:length(gnames)) {
             gname <- gnames[i]
             wgt <- exprlist[[gname]][["wgt"]]
+            if("matrix" %in% class(wgt)){wgt <- as.matrix(wgt)}
             snpnames <- rownames(wgt)
             ld.idx <- match(snpnames, R_snp_anno$id)
             zdf.idx <- match(snpnames, z_snp$id)
