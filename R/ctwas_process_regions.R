@@ -278,14 +278,17 @@ index_regions <- function(regionfile,
             loginfo("DEBUG1")
             R_snp_gene[,i] <- sapply(1:nrow(R_snp),
                                      function(x){crossprod(wgt,R_snp[ld.idx,x])/sqrt(crossprod(wgt,R.s)%*%wgt*R_snp[x,x])})
+            summary(R_snp_gene[,i])
           }
 
           if (length(gnames) > 1){
             gene_pairs <- combn(length(gnames), 2)
             wgtr <- wgtlistall[gnames]
-            if(!"matrix" %in% class(wgtr)){wgtr <- as.matrix(wgtr)}
+            for(i in wgtr){
+              if(!"matrix" %in% class(wgtr[[i]])){wgtr[[i]] <- as.matrix(wgtr[[i]])}
+            }
             if(!"matrix" %in% class(R_snp)){R_snp <- as.matrix(R_snp)}
-            loginfo("DEBUG1")
+            loginfo("DEBUG2")
             gene_corrs <- apply(gene_pairs, 2, function(x){t(wgtr[[x[1]]])%*%R_snp[ldr[[x[1]]], ldr[[x[2]]]]%*%wgtr[[x[2]]]/(
               sqrt(t(wgtr[[x[1]]])%*%R_snp[ldr[[x[1]]], ldr[[x[1]]]]%*%wgtr[[x[1]]]) *
                 sqrt(t(wgtr[[x[2]]])%*%R_snp[ldr[[x[2]]], ldr[[x[2]]]]%*%wgtr[[x[2]]]))})
