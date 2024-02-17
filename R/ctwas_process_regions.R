@@ -267,6 +267,7 @@ index_regions <- function(regionfile,
           ldr <- list()
           for (i in 1:length(gnames)){
             gname <- gnames[i]
+            loginfo(paste0(gname))
             wgt <- wgtlistall[[gname]]
             snpnames <- rownames(wgt)
             ld.idx <- match(snpnames, R_snp_anno$id)
@@ -275,7 +276,7 @@ index_regions <- function(regionfile,
             if(!"matrix" %in% class(wgt)){wgt <- as.matrix(wgt)}
             if(!"matrix" %in% class(R_snp)){R_snp <- as.matrix(R_snp)}
             if(!"matrix" %in% class(R.s)){R.s <- as.matrix(R.s)}
-            loginfo("DEBUG1")
+            loginfo(paste0(R.s))
             R_snp_gene[,i] <- sapply(1:nrow(R_snp),
                                      function(x){crossprod(wgt,R_snp[ld.idx,x])/sqrt(crossprod(wgt,R.s)%*%wgt*R_snp[x,x])})
             summary(R_snp_gene[,i])
