@@ -133,7 +133,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
           p1 <- exprlist[[gname]][["p1"]]
           ifreg <- ifelse(p1 >= ld_Rinfo[, "start"] & 
                             p0 < ld_Rinfo[, "stop"], T, F)
-          exprlist[[gname]][["reg"]] <- paste(sort(ld_Rinfo[ifreg, 
+          exprlist[[gname]][["reg"]] <- paste(sort(ld_Rinfo[as.vector(ifreg), 
                                                             "region_name"]), collapse = ";")
         }
         regs <- data.frame(gid = names(exprlist), reg = unlist(lapply(exprlist, 
