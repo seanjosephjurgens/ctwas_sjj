@@ -71,7 +71,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
       ld_snpinfo <- read_pvar(ld_pvarf)
     } else {
       ld_Rf <- ld_Rfs[b]
-      ld_Rinfo <- data.table::fread(ld_Rf, header = T)
+      ld_Rinfo <- data.table::fread(ld_Rf, header = T, data.table=F)
       ld_snpinfo <- read_ld_Rvar(ld_Rf)
     }
     chrom <- unique(ld_snpinfo$chrom)
@@ -108,6 +108,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
         for (i in 1:length(gnames)) {
           gname <- gnames[i]
           wgt <- exprlist[[gname]][["wgt"]]
+          if("matrix" %in% class(wgt)){wgt <- as.matrix(wgt)}
           snpnames <- rownames(wgt)
           ld.idx <- match(snpnames, ld_snpinfo$id)
           z.idx <- match(snpnames, z_snp$id)
@@ -133,8 +134,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
           p1 <- exprlist[[gname]][["p1"]]
           ifreg <- ifelse(p1 >= ld_Rinfo[, "start"] & 
                             p0 < ld_Rinfo[, "stop"], T, F)
-          exprlist[[gname]][["reg"]] <- paste(sort(ld_Rinfo[as.vector(ifreg), 
-                                                            "region_name"]), collapse = ";")
+          exprlist[[gname]][["reg"]] <- paste(sort(as.vector(ld_Rinfo[as.vector(ifreg),"region_name"])), collapse = ";")
         }
         regs <- data.frame(gid = names(exprlist), reg = unlist(lapply(exprlist, 
                                                                       "[[", "reg")), stringsAsFactors = F)
@@ -156,8 +156,7 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
             zdf.idx <- match(snpnames, z_snp$id)
             R.s <- R_snp[ld.idx, ld.idx]
             z.s <- as.matrix(z_snp[zdf.idx, "z"])
-            z.g <- crossprod(wgt, z.s)/sqrt(crossprod(wgt, 
-                                                      R.s) %*% wgt)
+            z.g <- crossprod(wgt, z.s)/sqrt(crossprod(wgt,R.s) %*% wgt)
             exprlist[[gname]][["z.g"]] <- z.g
           }
         }
