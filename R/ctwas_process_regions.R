@@ -232,7 +232,7 @@ index_regions <- function(regionfile,
     loginfo("Adding R matrix info, as genotype is not given")
 
     dir.create(file.path(outputdir, paste0(outname, "_LDR")), showWarnings = F)
-
+    
     wgtall <- lapply(exprvarfs, function(x){
       load(paste0(strsplit(x, ".exprvar")[[1]], ".exprqc.Rd")); wgtlist})
     wgtlistall <- do.call(c, wgtall)
@@ -272,6 +272,7 @@ index_regions <- function(regionfile,
             ld.idx <- match(snpnames, R_snp_anno$id)
             ldr[[gname]] <- ld.idx
             R.s <- R_snp[ld.idx, ld.idx]
+            if(!"matrix" %in% class(wgt)){wgt <- as.matrix(wgt)}
             R_snp_gene[,i] <- sapply(1:nrow(R_snp),
                                      function(x){crossprod(wgt,R_snp[ld.idx,x])/sqrt(crossprod(wgt,R.s)%*%wgt*R_snp[x,x])})
           }
@@ -279,6 +280,7 @@ index_regions <- function(regionfile,
           if (length(gnames) > 1){
             gene_pairs <- combn(length(gnames), 2)
             wgtr <- wgtlistall[gnames]
+            if(!"matrix" %in% class(wgtr)){wgtr <- as.matrix(wgtr)}
             gene_corrs <- apply(gene_pairs, 2, function(x){t(wgtr[[x[1]]])%*%R_snp[ldr[[x[1]]], ldr[[x[2]]]]%*%wgtr[[x[2]]]/(
               sqrt(t(wgtr[[x[1]]])%*%R_snp[ldr[[x[1]]], ldr[[x[1]]]]%*%wgtr[[x[1]]]) *
                 sqrt(t(wgtr[[x[2]]])%*%R_snp[ldr[[x[2]]], ldr[[x[2]]]]%*%wgtr[[x[2]]]))})
