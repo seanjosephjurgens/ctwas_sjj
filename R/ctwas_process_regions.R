@@ -314,6 +314,7 @@ index_regions <- function(regionfile,
           regionlist[[b]][[rn]][["R_s_file"]] <- R_s_file
         }
       }
+      rm(R_snp, R_snp_gene, R_gene, gene_corrs, wgtlistall, gnames, ld_Rinfo, ld_Rf, ld_Rfs)
       list(regionlist[[b]])
     }
     parallel::stopCluster(cl)
