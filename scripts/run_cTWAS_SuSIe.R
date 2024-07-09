@@ -2,11 +2,14 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
+base_wd <- "/home/jupyter/cTWAS/"
+
 gwas_name <- as.character(args[1])
 pheno_name <- as.character(args[2])
 p_thres <- as.numeric(args[3])
 r2_thres <- as.numeric(args[4])
 rerun <- as.logical(args[5])
+try(base_wd <- as.character(args[6]))
 
 ####################
 ## Collect results
@@ -19,7 +22,7 @@ library(data.table)
 #p_thres=p1e-07
 #r2_thres=r20.001
 
-finemap_dir <- paste0('/home/jupyter/cTWAS/results/fine_mapping/')
+finemap_dir <- paste0(base_wd, 'results/fine_mapping/')
 tissue <- paste0(pheno_name, "_p", p_thres, "_r2", r2_thres)
 outputdir <- paste0(finemap_dir, '/', gwas_name, '/', tissue, '/')
 outname <- paste0(gwas_name, '_', tissue, '_finemap_results_UKBld')
@@ -29,7 +32,7 @@ res_file <- paste0(outputdir, "/", outname)
 if( !file.exists(paste0(res_file, ".susieIrss.txt")) ){
 if( !rerun ){
 
-new_dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
+new_dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
 system(paste0("mkdir ", new_dir))
 
 # Collect per-chromosome results for each chunk and munge
@@ -43,7 +46,7 @@ for(chr in c(1:22)){
   exprvar_total <- NULL
   
   for(chunk in c(1:65)){
-    dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
+    dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
     setwd(dir)
     expr_file <- paste0(gwas_name, '_chunk', chunk, '_UKBld_chr', chr, '.exprqc.Rd')
     load(expr_file)
@@ -112,8 +115,8 @@ for(chr in c(1:22)){
 
 # Collect LD regions (same for every chunk, so just use chrunk1 results)
 for(chr in c(1:22)){
-  dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk1/')
-  new_dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
+  dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk1/')
+  new_dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
   
   old_file <- paste0(gwas_name, '_chunk1_UKBld_ld_R_chr', chr, '.txt')
   new_file <- paste0(gwas_name, '_chunkall_UKBld_ld_R_chr', chr, '.txt')
@@ -123,7 +126,7 @@ for(chr in c(1:22)){
 
 # Collect main Zscore results (one result per junk)
 chunk <- 1
-dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
+dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
 setwd(dir)
 zfile <- paste0(gwas_name, '_chunk', chunk, '_UKBld_Zsnp_results.Rd')
 load(zfile)
@@ -132,7 +135,7 @@ z_snp_total <- z_snp
 z_gene_total <- NULL
 for(chunk in c(1:65)){
   message(paste0("Busy with ", chunk, "..."))
-  dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
+  dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
   setwd(dir)
   zfile <- paste0(gwas_name, '_chunk', chunk, '_UKBld_Zgene_results.Rd')
   load(zfile)
@@ -154,7 +157,7 @@ if(length(rm)>0){
   z_gene <- z_gene[-rm, ]
 }
 
-new_dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
+new_dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
 setwd(new_dir)
 res <- list(z_gene, z_snp)
 save(res, file=paste0(gwas_name, '_chunkall_UKBld_Zresults.Rd'))
@@ -167,7 +170,7 @@ save(res, file=paste0(gwas_name, '_chunkall_UKBld_Zresults.Rd'))
 z_gene_total <- NULL
 for(chunk in c(1:65)){
   message(paste0("Busy with ", chunk, "..."))
-  dir <- paste0('~/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
+  dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/chunk', chunk)
   setwd(dir)
   zfile <- paste0(gwas_name, '_chunk', chunk, '_UKBld_Zgene_results.Rd')
   system(paste0("rm  ", zfile))
@@ -183,7 +186,7 @@ for(chunk in c(1:65)){
 
 library(ctwas)
 library(data.table)
-new_dir <- paste0('/home/jupyter/cTWAS/results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
+new_dir <- paste0(base_wd, 'results/imputed_gene_expression/', gwas_name, '/', pheno_name, '_p', p_thres, '_r2', r2_thres, '/combined/')
 for(chr in c(1:22)){
   outfile1 <- paste0(gwas_name, '_chunkall_UKBld_chr', chr, '.exprqc.Rd')
   load(paste0(new_dir, "/", outfile1))
@@ -194,14 +197,14 @@ z_gene <- res[[1]]
 z_snp <- res[[2]]
 
 ld_exprvarfs <- paste0(new_dir, '/', gwas_name, '_chunkall_UKBld_chr', c(1:22), '.exprvar')
-ld_R_dir <- "/home/jupyter/cTWAS/data/UKB_LDref/matrices_0.1/LDR_b38_cova/"
+ld_R_dir <- paste0(base_wd, "data/UKB_LDref/matrices_0.1/LDR_b38_cova/")
 #ld_pgenfs <- paste0("/home/jupyter/cTWAS/data/GTEx_LDref/GTEx_EUR_chr", 1:22, ".bed")
 
 regions <- system.file("extdata/ldetect", "EUR.b38.bed", package = "ctwas")
 regions_df <- read.table(regions, header = T)
 
 tissue <- paste0(pheno_name, '_p', p_thres, '_r2', r2_thres)
-finemap_dir <- paste0('/home/jupyter/cTWAS/results/fine_mapping/')
+finemap_dir <- paste0(base_wd, 'results/fine_mapping/')
 system(paste0("mkdir ", finemap_dir))
 system(paste0("mkdir ", finemap_dir, '/', gwas_name, '/'))
 system(paste0("mkdir ", finemap_dir, '/', gwas_name, '/', tissue, '/'))
