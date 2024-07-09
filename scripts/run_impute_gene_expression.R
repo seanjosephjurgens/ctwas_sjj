@@ -77,5 +77,5 @@ z_gene <- res$z_gene,
 save(z_gene, file=paste0(outputdir, '/', gwas_name, '_chunk', chunk, '_Zgene_results.Rd'))
 ###save(res, file=paste0(outputdir, '/', gwas_name, '_chunk', chunk, '_Zresults.Rd'))
 
-system(paste0("rm -rf ~/cTWAS/data/GTEx_models/weights_nolnc/mashr_", tissue, "_nolnc_subset_chunk", chunk, ".db"))
-system(paste0("rm -rf ~/cTWAS/data/GTEx_models/weights_nolnc/mashr_", tissue, "_nolnc_subset_chunk", chunk, ".txt.gz"))
+system(paste0("rm -rf ", base_wd, "data/GTEx_models/weights_nolnc/mashr_", tissue, "_nolnc_subset_chunk", chunk, ".db"))
+system(paste0("rm -rf ", base_wd, "data/GTEx_models/weights_nolnc/mashr_", tissue, "_nolnc_subset_chunk", chunk, ".txt.gz"))
