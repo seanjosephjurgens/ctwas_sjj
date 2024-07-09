@@ -2,12 +2,15 @@
 
 args = commandArgs(trailingOnly=TRUE)
 
+base_wd <- "/home/jupyter/cTWAS/"
+
 formatted_sumstats <- as.character(args[1])
 gwas_name <- as.character(args[2])
 tissue <- as.character(args[3])
 total_chunks <- as.numeric(args[4])
 chunk <- as.numeric(args[5])
 fusion_weight_dir  <- as.character(args[6])
+try(base_wd <- as.character(args[7]))
 
 library(RSQLite)
 library(ctwas)
@@ -17,9 +20,9 @@ z_snp <- readRDS(formatted_sumstats)
 
 #ld_pgenfs <- paste0("~/cTWAS/data/GTEx_LDref/", paste0("GTEx_EUR_chr", 1:22, ".bed"))
 ##ld_R_dir <- "/home/jupyter/cTWAS/data/GTEx_LDref/matrices_0.1/LDR_b38_cova/"
-ld_R_dir <- "/home/jupyter/cTWAS/data/UKB_LDref/matrices_0.1/LDR_b38_cova/"
+ld_R_dir <- paste0(base_wd, "data/UKB_LDref/matrices_0.1/LDR_b38_cova/")
 
-outputdir <- paste0("~/cTWAS/results/imputed_gene_expression/", gwas_name, "/", tissue, "/chunk", chunk)
+outputdir <- paste0(base_wd, "results/imputed_gene_expression/", gwas_name, "/", tissue, "/chunk", chunk)
 outname <- paste0(gwas_name, "_chunk", chunk, "_UKBld")
 dir.create(outputdir, showWarnings=F, recursive=T)
 
