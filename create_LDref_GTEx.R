@@ -8,15 +8,18 @@ print(paste0("chromsome: ", b))
 print(paste0("start region: ", reg_start))
 print(paste0("end region: ", reg_end))
 
-system("mkdir /home/jupyter/cTWAS/data/GTEx_LDref/matrices_0.1")
-setwd("/home/jupyter/cTWAS/data/GTEx_LDref/matrices_0.1")
+base_dir <- paste0("/home/jupyter/cTWAS/")
+try(system(paste0("mkdir ", base_dir, "data/")))
+try(system(paste0("mkdir ", base_dir, "data/GTEx_LDref")))
+try(system(paste0("mkdir ", base_dir, "data/GTEx_LDref/matrices_0.1")))
+setwd(paste0(base_dir, "data/GTEx_LDref/matrices_0.1"))
 
 library(ctwas)
 library(tools)
 library(data.table)
 
 # specify LD reference
-ldref_dir <- "/home/jupyter/cTWAS/data/GTEx_LDref"
+ldref_dir <- paste0(base_dir, "data/GTEx_LDref/")
 ldref_prefix <- "GTEx_EUR_chr"
 ldref_suffix <- ""
 ldref_filtype <- ".bed"
@@ -28,7 +31,7 @@ ld_regions_custom = NULL
 
 # specify output
 out_filestem <- "GTEx_b38_0.1_chr"
-out_dir <- "/home/jupyter/cTWAS/data/GTEx_LDref/matrices_0.1/LDR_b38_cova"
+out_dir <- paste0(ldref_dir, "matrices_0.1/LDR_b38_cova/")
 
 dir.create(out_dir, showWarnings=F)
 if (is.null(ld_regions_custom)) {
@@ -48,7 +51,7 @@ ld_pvarfs <- sapply(ldref_files, ctwas:::prep_pvar, outputdir = out_dir)
 #load build 38 positions
 snpinfo_hg38_all <- NULL
 for(chr in c(1:22)){
-  bim <- fread(paste0("/home/jupyter/cTWAS/data/GTEx_LDref/GTEx_EUR_chr", chr, ".bim"), stringsAsFactors = F, data.table=F)
+  bim <- fread(paste0(ldref_dir, "GTEx_EUR_chr", chr, ".bim"), stringsAsFactors = F, data.table=F)
   snpinfo_hg38_all <- rbind(snpinfo_hg38_all, bim)
 }
 colnames(snpinfo_hg38_all) <- c("chr", "id", "cm", "pos", "alt", "ref")
