@@ -18,6 +18,7 @@ library(data.table)
 #cis_trans <- "cis"
 #gwas_file <- paste0('~/cTWAS/data/sum_stats/cTWAS_input/DCM_GWAS_nonimputed_SS.RDS')
 #gwas_name <- "DCM_GWAS"
+#run_MR <- TRUE
 
 p_thresholds <- c(as.numeric(args[1]))
 r2_thresholds <- c(as.numeric(args[2]))
@@ -65,7 +66,7 @@ foreach (CHR = c(1:22), .combine='c',
   cat("\n\n\n\n\n")
   Sys.sleep(4)
       
-  LDreference_prefix <- paste0('~/cTWAS/data/UKB_LDref/UKBB_ldref_chr',CHR,'_sorted')
+  LDreference_prefix <- paste0(base_wd, '/../UKB_LDref/UKBB_ldref_chr',CHR,'_sorted')
   library(data.table)
   
   
